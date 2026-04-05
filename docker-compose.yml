@@ -3,21 +3,34 @@ services:
       image : mongo
       ports : 
         - "27017:27017"      
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: admin
+        MONGO_INITDB_ROOT_PASSWORD: admin123
       networks:
         - mynetwork
       restart: always
       volumes:
         - mongodb_data:/data/db
-
+      healthcheck:
+        test: ["CMD", "mongosh", "-u" , "admin" , "-p", "admin123","--eval","db.adminCommand('ping')"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+      
+      
     app: 
       build : .
       ports : 
         - "3000:3000"      
+      env_file:
+        - .env
       networks:
         - mynetwork
       restart: always
       depends_on:
-        - mongo
+        mongo: 
+          condition: service_healthy
+
 
 volumes:
   mongodb_data:

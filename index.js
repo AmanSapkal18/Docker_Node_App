@@ -2,9 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
-const PORT = 3000;
 
-const mongodbURL = 'mongodb://mongo:27017/mydb';
+const PORT = process.env.PORT || 3000;
+const DB_USER = process.env.MONGO_USER;
+const DB_PASSWORD = process.env.MONGO_PASSWORD;
+const DB_HOST = process.env.MONGO_HOST || 'mongo';
+const DB_NAME = process.env.MONGO_DB || 'mydb';
+
+const mongodbURL = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:27017/${DB_NAME}?authSource=${DB_USER}`;
 
 mongoose.connect(mongodbURL)
 .then(() => console.log("MongoDB connected successfully"))
