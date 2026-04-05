@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY . .
 
+#install all the packages specified in package*.json files
 RUN npm install
 
 EXPOSE 3000

@@ -1,0 +1,26 @@
+services:
+    mongo :
+      image : mongo
+      ports : 
+        - "27017:27017"      
+      networks:
+        - mynetwork
+      restart: always
+      volumes:
+        - mongodb_data:/data/db
+
+    app: 
+      build : .
+      ports : 
+        - "3000:3000"      
+      networks:
+        - mynetwork
+      restart: always
+      depends_on:
+        - mongo
+
+volumes:
+  mongodb_data:
+
+networks:
+  mynetwork:
